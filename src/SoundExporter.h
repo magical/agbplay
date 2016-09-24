@@ -20,7 +20,7 @@ namespace agbplay
 
             void Export(std::string outputDir, std::vector<SongEntry>& entries, std::vector<bool>& ticked);
         private:
-            size_t exportSong(std::string fileName, uint16_t uid);
+            size_t exportSong(std::string fileName, std::string title, uint16_t uid);
 
             ConsoleGUI& con;
             GameConfig& cfg;

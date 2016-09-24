@@ -61,7 +61,7 @@ void SoundExporter::Export(string outputDir, vector<SongEntry>& entries, vector<
         uilock.lock();
         con.WriteLn(FormatString("%3d %% - Rendering to file: \"%s\"", (i + 1) * 100 / tEnts.size(), fname));
         uilock.unlock();
-        size_t rblocks = exportSong(FormatString("%s/%03d - %s", outputDir, i + 1, fname), tEnts[i].GetUID());
+        size_t rblocks = exportSong(FormatString("%s/%03d - %s", outputDir, i + 1, fname), tEnts[i].name, tEnts[i].GetUID());
         totalBlocksRendered += rblocks;
     }
 
@@ -80,7 +80,7 @@ void SoundExporter::Export(string outputDir, vector<SongEntry>& entries, vector<
  * private SoundExporter
  */
 
-size_t SoundExporter::exportSong(string fileName, uint16_t uid)
+size_t SoundExporter::exportSong(string fileName, string title, uint16_t uid)
 {
     // setup our generators
     Sequence seq(sd.sTable->GetPosOfSong(uid), cfg.GetTrackLimit(), rom);
@@ -101,14 +101,15 @@ size_t SoundExporter::exportSong(string fileName, uint16_t uid)
                 memset(&oinfos[i], 0, sizeof(oinfos[i]));
                 oinfos[i].samplerate = STREAM_SAMPLERATE;
                 oinfos[i].channels = N_CHANNELS;
-                oinfos[i].format = SF_FORMAT_WAV | SF_FORMAT_FLOAT;
-                ofiles[i] = sf_open(FormatString("%s.%02d.wav", fileName, i).c_str(), SFM_WRITE, &oinfos[i]);
+                oinfos[i].format = SF_FORMAT_FLAC | SF_FORMAT_PCM_16;
+                ofiles[i] = sf_open(FormatString("%s.%02d.flac", fileName, i).c_str(), SFM_WRITE, &oinfos[i]);
                 if (ofiles[i] == NULL)
                 {
                     uilock.lock();
                     con.WriteLn(FormatString("Error: %s", sf_strerror(NULL)));
                     uilock.unlock();
                 }
+                sf_set_string(ofiles[i], SF_STR_TITLE, FormatString("%s track #%d", title, i).c_str());
             }
 
             while (true)
@@ -149,14 +150,17 @@ size_t SoundExporter::exportSong(string fileName, uint16_t uid)
             memset(&oinfo, 0, sizeof(oinfo));
             oinfo.samplerate = STREAM_SAMPLERATE;
             oinfo.channels = N_CHANNELS;
-            oinfo.format = SF_FORMAT_WAV | SF_FORMAT_FLOAT;
-            SNDFILE *ofile = sf_open((fileName + ".wav").c_str(), SFM_WRITE, &oinfo);
+            oinfo.format = SF_FORMAT_FLAC | SF_FORMAT_PCM_16;
+            SNDFILE *ofile = sf_open((fileName + ".flac").c_str(), SFM_WRITE, &oinfo);
             if (ofile == NULL) {
                 uilock.lock();
                 con.WriteLn(FormatString("Error: %s", sf_strerror(NULL)));
                 uilock.unlock();
                 return 0;
             }
+            // set title
+            sf_set_string(ofile, SF_STR_TITLE, title.c_str());
+
             // do rendering and write
             vector<float> renderedData(nBlocks * N_CHANNELS);
 
