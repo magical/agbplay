@@ -293,28 +293,31 @@ void WindowGUI::initColors()
     if (use_default_colors() == ERR)
         throw MyException("Using default terminal colors failed");
     if (COLORS != 256)
+
         throw MyException("Terminal does not support 256 colors");
-    init_pair((int)Color::DEF_DEF, -1, -1);
-    init_pair((int)Color::BANNER_TEXT, COLOR_YELLOW, -1);
-    init_pair((int)Color::WINDOW_FRAME, COLOR_GREEN, -1);
-    init_pair((int)Color::LIST_ENTRY, COLOR_YELLOW, -1);
-    init_pair((int)Color::LIST_SEL, COLOR_RED, -1);
-    init_pair((int)Color::VU_LOW, 82, -1);
-    init_pair((int)Color::VU_MID, 226, -1);
-    init_pair((int)Color::VU_HIGH, 202, -1);
-    init_pair((int)Color::TRK_NUM, 76, -1);
-    init_pair((int)Color::TRK_NUM_MUTED, 202, -1);
-    init_pair((int)Color::TRK_LOC, 118, -1);
-    init_pair((int)Color::TRK_LOC_CALL, 184, -1);
-    init_pair((int)Color::TRK_DEL, 196, -1);
-    init_pair((int)Color::TRK_NOTE, 45, -1);
-    init_pair((int)Color::TRK_VOICE, 217, -1);
-    init_pair((int)Color::TRK_PAN, 214, -1);
-    init_pair((int)Color::TRK_VOL, 154, -1);
-    init_pair((int)Color::TRK_MOD, 43, -1);
-    init_pair((int)Color::TRK_PITCH, 129, -1);
-    init_pair((int)Color::TRK_LOUDNESS, 70, /*238*/-1);
-    init_pair((int)Color::TRK_LOUD_SPLIT, -1, /*238*/-1);
+
+    short bg = COLOR_BLACK;
+    init_pair((int)Color::DEF_DEF, COLOR_WHITE, bg);
+    init_pair((int)Color::BANNER_TEXT, COLOR_YELLOW, bg);
+    init_pair((int)Color::WINDOW_FRAME, COLOR_GREEN, bg);
+    init_pair((int)Color::LIST_ENTRY, COLOR_YELLOW, bg);
+    init_pair((int)Color::LIST_SEL, COLOR_RED, bg);
+    init_pair((int)Color::VU_LOW, 82, bg);
+    init_pair((int)Color::VU_MID, 226, bg);
+    init_pair((int)Color::VU_HIGH, 202, bg);
+    init_pair((int)Color::TRK_NUM, 76, bg);
+    init_pair((int)Color::TRK_NUM_MUTED, 202, bg);
+    init_pair((int)Color::TRK_LOC, 118, bg);
+    init_pair((int)Color::TRK_LOC_CALL, 184, bg);
+    init_pair((int)Color::TRK_DEL, 196, bg);
+    init_pair((int)Color::TRK_NOTE, 45, bg);
+    init_pair((int)Color::TRK_VOICE, 217, bg);
+    init_pair((int)Color::TRK_PAN, 214, bg);
+    init_pair((int)Color::TRK_VOL, 154, bg);
+    init_pair((int)Color::TRK_MOD, 43, bg);
+    init_pair((int)Color::TRK_PITCH, 129, bg);
+    init_pair((int)Color::TRK_LOUDNESS, 70, /*238*/bg);
+    init_pair((int)Color::TRK_LOUD_SPLIT, COLOR_WHITE, /*238*/bg);
 }
 
 void WindowGUI::cycleFocus() 
