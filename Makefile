@@ -10,7 +10,7 @@ ifneq (, $(findstring linux, $(SYS)))
 	# clang doesn't seem to compile correctly on windows but on linux it works
 	# use g++ for now instead of clang++, OpenMP seems to be a bit tricky with clang
 	CXX = g++
-	LIBS = ../portaudio/lib/.libs/libportaudio.a $(BASE_LIBS) -lasound
+	LIBS = -lportaudio $(BASE_LIBS) -lasound
 else ifneq (, $(findstring cygwin, $(SYS))$(findstring windows, $(SYS)))
 	LIBS = ../portaudio/lib/.libs/libportaudio.dll.a $(BASE_LIBS)
 	CXXFLAGS += -D_GLIBCXX_USE_C99=1 -D_BSD_SOURCE
@@ -18,12 +18,12 @@ else
 	# put something else here
 endif
 
-IMPORT = -I ../portaudio/include
+IMPORT = 
 
 GREEN = \033[1;32m
 RED = \033[1;31m
 BROWN = \033[1;33m
-WHITE = \033[1;37m
+WHITE = 
 NCOL = \033[0m
 
 SRC_FILES = $(wildcard src/*.cpp)
